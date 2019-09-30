@@ -8,16 +8,16 @@
     <div class="text-center border-bottom">
         <h2>Movie Watch List</h2>
     </div>
-    <br/>
+    <br />
     <div class="row">
         <div class="col-12 text-right">
             <partial name="_CreateButtonPartial" />
         </div>
     </div>
-    
+
     <br />
     <div>
-        @if(Model.Count() > 0)
+        @if (Model.Count() > 0)
         {
             <table class="table table-striped border">
                 <tr class="table-secondary">
@@ -33,9 +33,15 @@
                     <th>
                         @Html.DisplayNameFor(m => m.Description)
                     </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Star)
+                    </th>
+                    <th class="text-right">
+                        Edit/Details/Delete
+                    </th>
                 </tr>
-                @foreach(var item in Model)
-                 {
+                @foreach (var item in Model)
+                {
                     <tr>
                         <td>
                             @Html.DisplayFor(m => item.Name)
@@ -49,11 +55,15 @@
                         <td>
                             @Html.DisplayFor(m => item.Description)
                         </td>
-                        <td>
-                            <partial name="_TableButtonPartial" model="item.MovieId" />
+                        <td  readonly class="star"  type="checkbox">
+                            @Html.DisplayFor(m => item.Star)
                         </td>
+
+
+                        <partial name="_TableButtonPartial" model="item.MovieId" />
+
                     </tr>
-                 }
+                }
             </table>
         }
         else

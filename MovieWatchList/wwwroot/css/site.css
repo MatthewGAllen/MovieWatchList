@@ -61,3 +61,23 @@ body {
 .navcolor {
     background: rgba(55, 88, 138, 0.87);
 }
+
+
+input[type=checkbox] {
+    visibility: hidden;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+    input[type=checkbox]:before {
+        color: white;
+        content: "\2605";
+        position: absolute;
+        visibility: visible;
+    }
+
+    input[type=checkbox]:checked:before {
+        color: yellow;
+        content: "\2605";
+        position: absolute;
+    }

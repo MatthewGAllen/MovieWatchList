@@ -50,8 +50,71 @@ namespace MovieWatchList.Controllers
             {
                 return NotFound();
             }
-            var movieInfo = _db.MovieInfo.FindAsync(id);
+            var movieInfo = await _db.MovieInfo.FindAsync(id);
             if(movieInfo==null)
+            {
+                return NotFound();
+            }
+            return View(movieInfo);
+        }
+
+
+        //POST-Edit-broken
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(MovieInfo movieInfo)
+        {
+
+
+            if(ModelState.IsValid)
+            {
+                _db.Update(movieInfo);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(movieInfo);
+        }
+
+        //GET-Delete
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var movieInfo = await _db.MovieInfo.FindAsync(id);
+            if (movieInfo == null)
+            {
+                return NotFound();
+            }
+            return View(movieInfo);
+        }
+
+        //POST-Delete
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int? id)
+        {
+            var category = await _db.MovieInfo.FindAsync(id);
+            if (category == null)
+            {
+                return View();
+            }
+            _db.MovieInfo.Remove(category);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        //GET-Details
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var movieInfo = await _db.MovieInfo.FindAsync(id);
+            if (movieInfo == null)
             {
                 return NotFound();
             }

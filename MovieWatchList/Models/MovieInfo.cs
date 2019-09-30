@@ -13,10 +13,13 @@ namespace MovieWatchList.Models
         [Required]
         public string Name { get; set; }
         public int Year { get; set; }
-
         public string Genre { get; set; }
         public string Description { get; set; }
         //public string Image { get; set; }
+
+        [Display(Name = "Favorite")]
+        public bool Star { get; set; }
+        
 
 
     }
