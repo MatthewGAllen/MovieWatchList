@@ -2,24 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieWatchList.Data;
 using MovieWatchList.Models;
+using MovieWatchList.Utility;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace MovieWatchList.Controllers
 {
+    [Authorize(Roles = SD.EndUser)]
     public class MovieInfoController : Controller
     {
         private readonly ApplicationDbContext _db;
-        public MovieInfoController(ApplicationDbContext db)
+        private readonly UserManager<IdentityUser> _manager;
+        public MovieInfoController(ApplicationDbContext db, UserManager<IdentityUser> manager)
         {
             _db = db;
+            _manager = manager;
         }
         
         //GET-Index
         public async Task<IActionResult> Index()
         {
+            
             return View(await _db.MovieInfo.ToListAsync());
         }
 
@@ -36,6 +44,8 @@ namespace MovieWatchList.Controllers
         {
             if(ModelState.IsValid)
             {
+                IdentityUser manager = await _manager.GetUserAsync(User);
+                movieInfo.UserId = manager.Id;
                 _db.Add(movieInfo);
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

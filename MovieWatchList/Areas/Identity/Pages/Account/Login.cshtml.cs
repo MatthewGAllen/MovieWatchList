@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using MovieWatchList.Data;
+using MovieWatchList.Models;
 
 namespace MovieWatchList.Areas.Identity.Pages.Account
 {
@@ -17,11 +19,17 @@ namespace MovieWatchList.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly ApplicationDbContext _db;
+        private readonly User _user;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        
+
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, ApplicationDbContext db, User user)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _db = db;
+            _user = user;
         }
 
         [BindProperty]
@@ -76,8 +84,9 @@ namespace MovieWatchList.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
+                    
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return LocalRedirect("~/MovieInfo/Index");
                 }
                 if (result.RequiresTwoFactor)
                 {
