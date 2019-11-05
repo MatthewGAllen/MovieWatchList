@@ -50,14 +50,15 @@ namespace MovieWatchList.Controllers
                 var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, false, lockoutOnFailure: true);
                 if(result.Succeeded)
                 {
+                    Console.WriteLine("hooray");
                     return Redirect("~/MovieInfo/Index");
                 }
                 else
                 {
-                    return View(login);
+                    return View(nameof(Index));
                 }
             }
-            return View(login);
+            return View(nameof(Index));
         }
 
         public IActionResult Privacy()

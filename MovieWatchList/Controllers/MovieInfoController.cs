@@ -27,8 +27,8 @@ namespace MovieWatchList.Controllers
         //GET-Index
         public async Task<IActionResult> Index()
         {
-            
-            return View(await _db.MovieInfo.ToListAsync());
+            var movies = await _db.MovieInfo.ToListAsync();
+            return View(movies);
         }
 
         //GET-Create
@@ -69,7 +69,7 @@ namespace MovieWatchList.Controllers
         }
 
 
-        //POST-Edit-broken
+        //POST-Edit-fixed?
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MovieInfo movieInfo)
@@ -78,6 +78,8 @@ namespace MovieWatchList.Controllers
 
             if(ModelState.IsValid)
             {
+                IdentityUser manager = await _manager.GetUserAsync(User);
+                movieInfo.UserId = manager.Id;
                 _db.Update(movieInfo);
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
